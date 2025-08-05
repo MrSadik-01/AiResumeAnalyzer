@@ -122,18 +122,4 @@ Sadik Habibulla  (https://github.com/MrSadik-01)
 Naveen K K       (https://github.com/Naveenkk-0793)
 ```
 
----
-
-### ✅ Next Steps (for GitHub)
-
-1. Save this as `README.md` in your project root
-2. Create a `.gitignore` file (if not already):
-
-```txt
-.env
-__pycache__/
-venv/
-*.pyc
-```
-
 
