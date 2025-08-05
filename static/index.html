@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Resume Analyzer</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="/static/favicon.png">
+  <meta name="description" content="Optimize your resume with AI to pass ATS systems and land more interviews. Upload your resume and job description for instant analysis.">
+  <meta name="keywords" content="ATS, resume optimization, AI resume analyzer, job description matching, resume scoring, job application, career development">
+  <style>
+    /* --- Same CSS as before for styling --- */
+    body {
+      font-family: 'Roboto', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+      color: white;
+    }
+    header { text-align: center; padding: 2rem 1rem; }
+    header h1 { font-size: 2.5rem; margin-bottom: 0.5rem; }
+    header p { font-size: 1.1rem; color: #cccccc; }
+    .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; padding: 3rem 2rem; background: #1c2b3a; text-align: left; }
+    .features h2 { grid-column: 1 / -1; text-align: center; margin-bottom: 2rem; }
+    .feature { background: #2e3e50; padding: 1.5rem; border-radius: 12px; transition: 0.3s ease; }
+    .feature:hover { background: #3c5068; }
+    .form-section { text-align: center; padding: 2rem; }
+    .form-box { background: #151f2e; border-radius: 14px; margin: 0 auto; max-width: 450px; padding: 34px 28px 26px 28px; box-shadow: 0 2px 28px 0 rgba(15, 32, 39, 0.12); text-align: left; display: inline-block; }
+    .form-box label { display: block; color: #eee; font-weight: bold; margin-bottom: 6px; font-size: 1rem; letter-spacing: 0.02em; }
+    .form-file-row { display: flex; align-items: center; }
+    .form-file-row input[type="file"] { margin-right: 14px; flex: 1 0 auto; }
+    .file-label { font-size: 0.97rem; color: #baa; margin-left: 0.5em; flex: none; }
+    .supported-formats { color: #bbb; font-size: 0.94rem; margin-left: 0; margin-bottom: 14px; display: block; }
+    .form-box textarea, .form-box input[type="text"] { width: 100%; margin: 8px 0 14px 0; border-radius: 6px; border: none; padding: 0.8rem; font-size: 1rem; background: #232d3b; color: #fff; outline: none; box-sizing: border-box; resize: vertical; }
+    .form-box input[type="text"] { margin-bottom: 10px; }
+    .optional-label { color: #bbb; font-weight: normal; font-size: 0.97em; }
+    .form-instruction { color: #bbb; font-size: 0.95rem; margin-bottom: 18px; margin-top: -7px; }
+    .analyze-btn { background: #a78bfa; color: white; width: 100%; font-weight: bold; font-size: 1.18rem; letter-spacing: 0.5px; border-radius: 8px; border: none; cursor: pointer; padding: 1.04rem 0; margin-bottom: 9px; transition: background 0.2s; }
+    .analyze-btn:hover:not(:disabled) { background: #7c5fe6; }
+    .analyze-btn:disabled { background: #666; cursor: not-allowed; }
+    .form-section .tagline { margin-top: 1.5rem; font-size: 1.2rem; font-weight: bold; color: #ffffff; text-align: center; }
+    .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; padding: 2rem; text-align: center; background: #324a5e; }
+    .stat { font-size: 1.5rem; font-weight: bold; }
+    .stat-desc { font-size: 0.9rem; color: #ddd; }
+    footer { background: #1c2b3a; color: #ccc; padding: 1rem 2rem; display: flex; justify-content: space-between; flex-wrap: wrap; font-size: 0.9rem; }
+    footer div { margin: 0.5rem 0; }
+    .loading { display: none; text-align: center; padding: 2rem; background: #1e2b3a; border-radius: 14px; margin: 2rem auto; max-width: 450px; }
+    .loading.show { display: block; }
+    .spinner { border: 4px solid #333; border-top: 4px solid #a78bfa; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 0 auto 15px; }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    .result-container { display: none; max-width: 800px; background: #1e2b3a; margin: 2rem auto; padding: 2rem; border-radius: 16px; box-shadow: 0 0 20px rgba(0, 0, 0, 0.3); }
+    .result-container.show { display: block; }
+    .score { font-size: 3rem; color: #a78bfa; text-align: center; margin-bottom: 1.5rem; }
+    .match-percentage { text-align: center; font-size: 1.3rem; margin-bottom: 2rem; }
+    .section { margin-bottom: 2rem; }
+    .section h3 { border-left: 4px solid #a78bfa; padding-left: 10px; margin-bottom: 0.7rem; color: #fff; }
+    .section p { color: #ddd; line-height: 1.6; }
+    .keywords { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem; }
+    .keyword { background: #324a5e; padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.9rem; }
+    .btn-back { display: inline-block; margin-top: 1.5rem; padding: 0.75rem 1.5rem; background: #a78bfa; color: #fff; text-decoration: none; border-radius: 8px; text-align: center; cursor: pointer; border: none; font-size: 1rem; }
+    .btn-back:hover { background: #7c5fe6; }
+    .message { margin: 1rem auto; max-width: 450px; padding: 1rem; border-radius: 8px; text-align: center; }
+    .message.error { background: #4a1a1a; border: 1px solid #cc4444; color: #ffcccc; }
+    .message.success { background: #1a4a1a; border: 1px solid #44cc44; color: #ccffcc; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Beat ATS Systems with AI-Powered Resume Optimization</h1>
+    <p>Our advanced AI analyzes your resume against job descriptions to ensure you pass Applicant Tracking Systems (ATS) and land more interviews.</p>
+  </header>
+
+  <section class="features">
+    <h2>Why Choose Our ATS Optimizer?</h2>
+    <div class="feature">
+      <h3>✔️ ATS Compatibility Check</h3>
+      <p>Ensure your resume passes through Applicant Tracking Systems used by 90% of companies.</p>
+    </div>
+    <div class="feature">
+      <h3>🔍 Keyword Optimization</h3>
+      <p>Identify missing keywords and optimize your resume for specific job descriptions.</p>
+    </div>
+    <div class="feature">
+      <h3>📊 ATS Score Rating</h3>
+      <p>Get a numerical score showing how well your resume matches the job requirements.</p>
+    </div>
+    <div class="feature">
+      <h3>⚡ Actionable Recommendations</h3>
+      <p>Receive specific, actionable advice to improve your resume's performance.</p>
+    </div>
+  </section>
+
+  <!-- Form Section -->
+  <section class="form-section">
+    <form class="form-box" id="resumeForm">
+      <label for="resumeInput">Choose file</label>
+      <div class="form-file-row">
+        <input type="file" id="resumeInput" name="resume" accept=".pdf" required/>
+        <span class="file-label" id="fileLabel">No file chosen</span>
+      </div>
+      <span class="supported-formats">Supported formats: PDF only (Max: 16MB)</span>
+      
+      <label for="jobDescription">Job Description</label>
+      <textarea id="jobDescription" name="jd_text" rows="5" placeholder="Paste the complete job description here..." required></textarea>
+      
+      <label for="jobURL">Or Job URL <span class="optional-label">(Optional)</span></label>
+      <input type="text" id="jobURL" placeholder="https://">
+      <div class="form-instruction">Note: Currently only job description text is supported</div>
+      
+      <button type="submit" class="analyze-btn" id="analyzeBtn">⚡ Analyze My Resume</button>
+    </form>
+    
+    <div class="tagline">
+      AI Resume Analyzer 🤖<br>
+      Get an instant analysis of your resume against a job description.
+    </div>
+
+    <!-- Message Area -->
+    <div id="messageArea"></div>
+
+    <!-- Loading Section -->
+    <div class="loading" id="loading">
+      <div class="spinner"></div>
+      <p>🤖 AI is analyzing your resume... This may take a moment.</p>
+    </div>
+
+    <!-- Results Section -->
+    <div class="result-container" id="results">
+      <div class="score" id="scoreDisplay">--</div>
+      <div class="match-percentage">Overall Resume-to-Job Match Score</div>
+      
+      <div class="section">
+        <h3>✅ Skills You Have</h3>
+        <div class="keywords" id="presentSkills"></div>
+      </div>
+      
+      <div class="section">
+        <h3>⚠️ Skills You Need</h3>
+        <div class="keywords" id="missingSkills"></div>
+      </div>
+      
+      <div class="section">
+        <h3>💡 Detailed Analysis</h3>
+        <p id="analysisText"></p>
+      </div>
+      
+      <div style="text-align: center;">
+        <button class="btn-back" onclick="resetForm()">🔙 Analyze Another Resume</button>
+      </div>
+    </div>
+  </section>
+  <!-- End form-section -->
+
+  <section class="stats">
+    <div>
+      <div class="stat">95%</div>
+      <div class="stat-desc">of companies use ATS systems</div>
+    </div>
+    <div>
+      <div class="stat">75%</div>
+      <div class="stat-desc">of resumes never reach human recruiters</div>
+    </div>
+    <div>
+      <div class="stat">3x</div>
+      <div class="stat-desc">higher interview rate with optimized resumes</div>
+    </div>
+    <div>
+      <div class="stat">24/7</div>
+      <div class="stat-desc">AI-powered analysis available</div>
+    </div>
+  </section>
+
+  <footer>
+    <div><strong>ATS Resume Optimizer</strong><br>Powered by AI to help you get past ATS systems and land your dream job.</div>
+    <div>&copy; 2025 ATS Resume Optimizer. All rights reserved.</div>
+  </footer>
+
+  <script>
+    const API_BASE_URL = 'http://localhost:5000';
+    const form = document.getElementById('resumeForm');
+    const fileInput = document.getElementById('resumeInput');
+    const fileLabel = document.getElementById('fileLabel');
+    const jobDescriptionInput = document.getElementById('jobDescription');
+    const loading = document.getElementById('loading');
+    const results = document.getElementById('results');
+    const messageArea = document.getElementById('messageArea');
+    const analyzeBtn = document.getElementById('analyzeBtn');
+
+    // File input handling
+    fileInput.addEventListener('change', () => {
+      const file = fileInput.files[0];
+      if (file) {
+        if (file.type === 'application/pdf') {
+          fileLabel.textContent = file.name;
+          showMessage('PDF file selected successfully!', 'success');
+        } else {
+          fileLabel.textContent = 'No file chosen';
+          fileInput.value = '';
+          showMessage('Please select a PDF file only.', 'error');
+        }
+      } else {
+        fileLabel.textContent = 'No file chosen';
+      }
+    });
+
+    // Form submission
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const resumeFile = fileInput.files[0];
+      const jobDescription = jobDescriptionInput.value.trim();
+
+      if (!resumeFile || !jobDescription) {
+        showMessage('Please provide both a resume PDF and job description.', 'error');
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append('resume', resumeFile);
+      formData.append('jd_text', jobDescription);
+
+      showLoading(true);
+      hideResults();
+      clearMessage();
+
+      try {
+        const response = await fetch(`${API_BASE_URL}/upload`, {
+          method: 'POST',
+          body: formData
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.error || 'Server error occurred');
+        }
+
+        displayResults(data);
+        showMessage('Analysis completed successfully!', 'success');
+      } catch (error) {
+        console.error('Error:', error);
+        let errorMessage = 'Analysis failed. ';
+        if (error.message.includes('fetch')) {
+          errorMessage += 'Please make sure the Flask server is running on port 5000.';
+        } else {
+          errorMessage += error.message;
+        }
+        showMessage(errorMessage, 'error');
+      } finally {
+        showLoading(false);
+      }
+    });
+
+    function showLoading(show) {
+      loading.classList.toggle('show', show);
+      analyzeBtn.disabled = show;
+      analyzeBtn.textContent = show ? '🤖 Analyzing...' : '⚡ Analyze My Resume';
+    }
+
+    function displayResults(data) {
+      if (data.error) {
+        showMessage(`Error: ${data.error}`, 'error');
+        return;
+      }
+      document.getElementById('scoreDisplay').textContent = `${data.score || 0}%`;
+
+      const presentSkillsContainer = document.getElementById('presentSkills');
+      presentSkillsContainer.innerHTML = '';
+      if (data.present_skills && data.present_skills.length > 0) {
+        data.present_skills.forEach(skill => {
+          const skillElement = document.createElement('div');
+          skillElement.className = 'keyword';
+          skillElement.textContent = skill;
+          presentSkillsContainer.appendChild(skillElement);
+        });
+      } else {
+        presentSkillsContainer.innerHTML = '<div class="keyword">No matching skills identified</div>';
+      }
+
+      const missingSkillsContainer = document.getElementById('missingSkills');
+      missingSkillsContainer.innerHTML = '';
+      if (data.missing_skills && data.missing_skills.length > 0) {
+        data.missing_skills.forEach(skill => {
+          const skillElement = document.createElement('div');
+          skillElement.className = 'keyword';
+          skillElement.textContent = skill;
+          missingSkillsContainer.appendChild(skillElement);
+        });
+      } else {
+        missingSkillsContainer.innerHTML = '<div class="keyword">No missing skills identified</div>';
+      }
+
+      document.getElementById('analysisText').textContent =
+        data.explanation || 'No detailed explanation available.';
+
+      showResults();
+    }
+
+    function showResults() {
+      results.classList.add('show');
+      results.scrollIntoView({ behavior: 'smooth' });
+    }
+    function hideResults() {
+      results.classList.remove('show');
+    }
+    function showMessage(text, type) {
+      messageArea.innerHTML = `<div class="message ${type}">${text}</div>`;
+      setTimeout(clearMessage, 5000);
+    }
+    function clearMessage() {
+      messageArea.innerHTML = '';
+    }
+    function resetForm() {
+      form.reset();
+      fileLabel.textContent = 'No file chosen';
+      hideResults();
+      clearMessage();
+    }
+    // Health check on page load
+    window.addEventListener('load', async () => {
+      try {
+        const response = await fetch(`${API_BASE_URL}/health`);
+        if (response.ok) {
+          console.log('✅ Backend connection successful');
+        } else {
+          throw new Error('Backend not responding');
+        }
+      } catch (error) {
+        console.error('❌ Backend connection failed:', error);
+        showMessage('⚠️ Backend server not connected. Make sure Flask server is running on port 5000.', 'error');
+      }
+    });
+  </script>
+</body>
+</html>
