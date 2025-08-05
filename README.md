@@ -110,8 +110,7 @@ Skills missing
 
 Results are displayed in the frontend
 
-🔐 Security Notes
-Your API key should never be committed to GitHub. Keep it in .env and add .env to .gitignore
+
 
 Max file size allowed: 16MB
 
@@ -122,12 +121,6 @@ File type allowed: PDF only
 Sadik Habibulla  (https://github.com/MrSadik-01) 
 Naveen K K       (https://github.com/Naveenkk-0793)
 ```
- License
-MIT License
-
-yaml
-Copy
-Edit
 
 ---
 
@@ -143,11 +136,4 @@ venv/
 *.pyc
 ```
 
-```Run these commands:
 
-git init
-git add .
-git commit -m "Initial commit - AI Resume Analyzer"
-git remote add origin https://github.com/yourusername/ai-resume-analyzer.git
-git push -u origin main
-```
