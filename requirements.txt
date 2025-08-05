@@ -1,0 +1,6 @@
+Flask
+python-dotenv
+gunicorn
+PyMuPDF
+google-generativeai
+flask-cors
