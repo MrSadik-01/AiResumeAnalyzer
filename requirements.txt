@@ -1,6 +1,6 @@
-Flask
-python-dotenv
-gunicorn
-PyMuPDF
-google-generativeai
-flask-cors
+flask==3.0.0
+flask-cors==4.0.0
+python-dotenv==1.0.0
+google-generativeai==0.3.2
+PyMuPDF==1.23.7
+gunicorn==21.2.0
