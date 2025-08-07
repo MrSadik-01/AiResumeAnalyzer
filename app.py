@@ -23,7 +23,7 @@ import fitz  # PyMuPDF
 from dotenv import load_dotenv
 
 from google import genai
-from google.genai import types
+# from google.genai import types optional for single model
 # ========== Importing Required Libraries ==========
 
 '''
