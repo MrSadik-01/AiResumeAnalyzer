@@ -252,10 +252,17 @@ Supporting Routes and Error Handler
 
 #if __name__ == '__main__':
  #   app.run(debug=True, port=5000)
+'''
+uncommad  below for render
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
     app.run(debug=False, host="0.0.0.0", port=port)
-
+'''
+if __name__ == '__main__':
+    # Check if running in development or production
+    if os.getenv('FLASK_ENV') == 'production':
+        app.run(host='0.0.0.0', port=int(os.getenv('PORT', 10000)))
+    else:
 '''
 Main entry point of the Flask application.
 
@@ -267,3 +274,4 @@ Note: Set `debug=False` when deploying to production.
 '''
 
 # ========== End of Flask App ==========
+
