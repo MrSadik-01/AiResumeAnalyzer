@@ -26,7 +26,7 @@ An AI-powered web application that analyzes your resume against a job descriptio
 
 ---
 
-## 📁 Project Structure
+```## 📁 Project Structure
 
 ai-resume-analyzer/
 │
@@ -36,7 +36,7 @@ ai-resume-analyzer/
 ├── .env # Contains GOOGLE_API_KEY (not pushed to GitHub)
 ├── requirements.txt # Python dependencies
 ├── README.md # This file
-
+```
 
 ---
 
