@@ -78,14 +78,13 @@ Click "Analyze My Resume" and get instant feedback
 ```requirements.txt
 You can create this file with the following content:
 
-nginx
-Copy
-Edit
 Flask
 flask-cors
 python-dotenv
 google-generativeai
+fitz
 PyMuPDF
+
 ```
 
 ```Then run:
