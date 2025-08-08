@@ -26,7 +26,7 @@ An AI-powered web application that analyzes your resume against a job descriptio
 
 ---
 
-```## 📁 Project Structure
+``` 📁 Project Structure
 
 ai-resume-analyzer/
 │
