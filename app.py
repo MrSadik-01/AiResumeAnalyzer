@@ -22,7 +22,9 @@ from flask_cors import CORS
 import fitz  # PyMuPDF
 from dotenv import load_dotenv
 
-from google import genai
+#from google import genai
+import google.generativeai as genai
+
 # from google.genai import types optional for single model
 # ========== Importing Required Libraries ==========
 
@@ -286,5 +288,6 @@ Note: Set `debug=False` when deploying to production.
 '''
 
 # ========== End of Flask App ==========
+
 
 
