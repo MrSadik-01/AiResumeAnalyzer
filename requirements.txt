@@ -4,4 +4,4 @@ python-dotenv==1.0.0
 google-generativeai==0.3.2
 gunicorn==21.2.0
 PyMuPDF==1.22.5  # Using an older stable version
-fitz==0.9.1
+fitz
